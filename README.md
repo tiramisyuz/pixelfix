@@ -1,15 +1,40 @@
-# Pixelfix
+# pixelfix
+Command line tool to change transparent pixels in images to use the nearest color instead of black
 
-Changes the colors of completely transparent pixels in an image to match the color of the nearest non-transparent pixel.
+Modern fork of [Transparent-Pixel-Fix](https://github.com/Corecii/Transparent-Pixel-Fix) with some optimizations (bun, sharp). A rewrite is planned in something lower level, like Rust
 
-Designed to be a quick drag-and-drop tool:
+## Comparison
+Old pixelfix (jimp) takes `2.556s` to process sample.png
 
-1. Make your images
-2. Select them all and drag them on to the pixelfix executable. The pixelfix executable will overwrite the original images with fixed copies.
-3. Make sure there were no errors and close the console window
-4. Use or upload your images. Your images should now look fine when resized.
+My pixelfix (sharp) takes `0.810s` to process sample.png
 
-[Download the latest release](https://github.com/Corecii/Transparent-Pixel-Fix/releases/latest)
+Both have exactly the same output. I did a pretty rough comparison by just doing `time` in bash before the exe path for both of them and held down enter lmfao
+
+## Usage
+Grab the latest release or build/run manually:
+
+```sh
+bun install
+bun index.js
+```
+
+To package for all platforms:
+
+```sh
+# Windows
+bun build --compile --minify --sourcemap --target=bun-windows-x64 index.js --outfile bin/pixelfix-windows.exe
+
+# Linux
+bun build --compile --minify --sourcemap --target=bun-linux-x64 index.js --outfile bin/pixelfix-linux
+
+# macOS
+bun build --compile --minify --sourcemap --target=bun-darwin-arm64 index.js --outfile bin/pixelfix-macos
+
+# macOS Intel
+bun build --compile --minify --sourcemap --target=bun-darwin-x64 index.js --outfile bin/pixelfix-macos-intel
+```
+
+you will download 100mb exe from releases and you will enjoy it
 
 ## More info
 
@@ -17,6 +42,7 @@ When saving an image file, most image editors will save completely transparent p
 
 This script keeps those pixels transparent, but changes their color to match the nearest non-transparent pixel. This means that when the non-transparent and transparent pixels are blended, there should be no color difference.
 
-This script is made into an executable using [the pkg tool](https://www.npmjs.com/package/pkg).
+An image with and without pixelfix applied:
 
-`pkg -o pixelfix -t node10-win-x64,node10-win-x86,node10-macos-x64,node10-linux-x64 .\index.js`
+![alt text](comparison.png)
+###### [source](https://devforum.roblox.com/t/pixelfix-remove-the-black-edges-on-scaled-images/201802)
